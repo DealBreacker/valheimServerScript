@@ -5,9 +5,10 @@ schemaVersion = "0.0.1"
 namespace = "AuthorName"
 name = "PackageName"
 versionNumber = "0.0.1"
-description = "Example mod description"
-websiteUrl = "https://thunderstore.io"
+description = "Simple Valheim vanilla + modpack made for me and a few friends. Mostly QOL features and a few extra additions."
+websiteUrl = ""
 containsNsfwContent = false
+
 [package.dependencies]
 AuthorName-PackageName = "0.0.1"
 
@@ -24,8 +25,8 @@ target = ""
 
 [publish]
 repository = "https://thunderstore.io"
-communities = [ "riskofrain2", ]
+communities = [ "valheim" ]
 [publish.categories]
-riskofrain2 = [ "items", "skills", ]
+valheim = [ "modpacks" ]
 
 
