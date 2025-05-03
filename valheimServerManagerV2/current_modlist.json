@@ -1,0 +1,150 @@
+[
+    {
+        "dependency": "denikson-BepInExPack_Valheim",
+        "latest_version": "5.4.2202"
+    },
+    {
+        "dependency": "Advize-PlantEverything",
+        "latest_version": "1.19.1"
+    },
+    {
+        "dependency": "Vapok-AdventureBackpacks",
+        "latest_version": "1.7.10"
+    },
+    {
+        "dependency": "ValheimModding-Jotunn",
+        "latest_version": "2.24.3"
+    },
+    {
+        "dependency": "ValheimModding-HookGenPatcher",
+        "latest_version": "0.0.4"
+    },
+    {
+        "dependency": "MathiasDecrock-PlanBuild",
+        "latest_version": "0.18.2"
+    },
+    {
+        "dependency": "Smoothbrain-Vitality",
+        "latest_version": "1.1.2"
+    },
+    {
+        "dependency": "do_the_dew-VitalityFix",
+        "latest_version": "0.0.7"
+    },
+    {
+        "dependency": "virtuaCode-EquipWheel",
+        "latest_version": "1.5.3"
+    },
+    {
+        "dependency": "RandyKnapp-EquipmentAndQuickSlots",
+        "latest_version": "2.1.14"
+    },
+    {
+        "dependency": "blacks7ar-LazyVikings",
+        "latest_version": "1.2.0"
+    },
+    {
+        "dependency": "Therzie-Warfare",
+        "latest_version": "1.8.9"
+    },
+    {
+        "dependency": "0zz-SeedTotem",
+        "latest_version": "0.1.3"
+    },
+    {
+        "dependency": "ishid4-BetterArchery",
+        "latest_version": "1.9.81"
+    },
+    {
+        "dependency": "MSchmoecker-MultiUserChest",
+        "latest_version": "0.6.1"
+    },
+    {
+        "dependency": "blacks7ar-VikingsDoSwim",
+        "latest_version": "1.3.8"
+    },
+    {
+        "dependency": "N3xus-FarmGrid",
+        "latest_version": "0.2.0"
+    },
+    {
+        "dependency": "Smoothbrain-Mining",
+        "latest_version": "1.1.5"
+    },
+    {
+        "dependency": "Smoothbrain-Sailing",
+        "latest_version": "1.1.7"
+    },
+    {
+        "dependency": "Tekla-AutoRepair",
+        "latest_version": "5.4.1602"
+    },
+    {
+        "dependency": "Smoothbrain-Lumberjacking",
+        "latest_version": "1.0.5"
+    },
+    {
+        "dependency": "mgway-PaddlePower",
+        "latest_version": "1.0.2"
+    },
+    {
+        "dependency": "Smoothbrain-Building",
+        "latest_version": "1.2.5"
+    },
+    {
+        "dependency": "virtuaCode-EmoteWheel",
+        "latest_version": "1.4.1"
+    },
+    {
+        "dependency": "Smoothbrain-Foraging",
+        "latest_version": "1.0.9"
+    },
+    {
+        "dependency": "Smoothbrain-Tenacity",
+        "latest_version": "1.0.3"
+    },
+    {
+        "dependency": "Smoothbrain-Evasion",
+        "latest_version": "1.0.3"
+    },
+    {
+        "dependency": "Smoothbrain-Ranching",
+        "latest_version": "1.1.3"
+    },
+    {
+        "dependency": "Smoothbrain-PackHorse",
+        "latest_version": "1.0.3"
+    },
+    {
+        "dependency": "Smoothbrain-SmartSkills",
+        "latest_version": "1.0.2"
+    },
+    {
+        "dependency": "Advize-CartographySkill",
+        "latest_version": "3.0.1"
+    },
+    {
+        "dependency": "MaxFoxGaming-Better_Beehives",
+        "latest_version": "1.2.3"
+    },
+    {
+        "dependency": "blacks7ar-BeeKeeper",
+        "latest_version": "1.0.6"
+    },
+    {
+        "dependency": "HS-HS_EquipInWater",
+        "latest_version": "1.0.0"
+    },
+    {
+        "dependency": "Smoothbrain-Network",
+        "latest_version": "1.0.2"
+    },
+    {
+        "dependency": "valheimgc-BetterArcheryEAQSFix",
+        "latest_version": "0.0.1"
+    },
+    {
+        "dependency": "blacks7ar-WieldEquipmentWhileSwimming",
+        "latest_version": "1.1.2"
+    }
+]

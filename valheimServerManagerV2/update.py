@@ -4,14 +4,12 @@ import json
 import subprocess
 
 class mods:
-
-    def __init__(game):
-        # Download all packages for the game from ThunderstoreAPI
-        api_raw = requests.get("https://thunderstore.io/c/{game}/api/v1/package/")
+    def __init__(self, game):
+        api_raw = requests.get(f"https://thunderstore.io/c/{game}/api/v1/package/")
         if api_raw.status_code != 200:
-            return f"Error {api_raw.status_code}: Could not fetch package list"
-        api_json = api_raw.json()
-        return api_json 
+            raise Exception(f"Error {api_raw.status_code}: Could not fetch package list")
+        self.api = api_raw.json()
+
     
 
     def global_mods(owner, modpack_name, api):
@@ -56,44 +54,63 @@ class mods:
 
         ## ~~~~~~~~~~ GRABBING LATEST MODPACK DEPENDENCIES ~~~~~~~~~~ ##
             latest_global_dep = []
-            # Find the dependency package in the full list
-            dep_pkg = next((dep for dep in mdpk_latest if dep["owner"] == dep_owner and dep["name"] == dep_name), None)
-            if not dep_pkg or not dep_pkg.get("versions"):
-                continue
-            
-            # Find the most recent version of the dependency
-            latest_dep_version = max(
-                (v["version_number"] for v in dep_pkg["versions"]),
-                key=lambda x: dep_pkg.parse(x)
-            )
-            latest_global_dep.append({
-                "dependency": f"{dep_owner}-{dep_name}",
-                "latest_version": latest_dep_version
-            })
+            for dep in mdpk_latest["dependencies"]:
+                parts = dep.split('-')
+                if len(parts) < 3:
+                    continue
+                
+                # Extract dependency components
+                dep_owner = parts[0]
+                dep_name = '-'.join(parts[1:-1])  # Handles names with hyphens
+                current_dep_version = parts[-1]
+
+                # Find dependency package in FULL API DATA (not mdpk_latest)
+                dep_pkg = next(
+                    (pkg for pkg in api  # <- Search through full API data
+                    if pkg["owner"] == dep_owner 
+                    and pkg["name"] == dep_name),
+                    None
+                )
+
+                if not dep_pkg:
+                    continue
+
+                # Get latest version from dependency package's versions
+                latest_dep_version = max(
+                    [v["version_number"] for v in dep_pkg["versions"]],
+                    key=lambda x: version.parse(x)
+                )
+
+                latest_global_dep.append({
+                    "dependency": f"{dep_owner}-{dep_name}",
+                    "latest_version": latest_dep_version
+                })
 
         return {
         "modpack": f"{owner}-{modpack_name}",
         "latest_version": mdpk_latest["version_number"],
         "dependencies": {
             "current": current_global_dep,
-            "latest": latest_global_dep
+            "latest": latest_global_dep,
+            "mdpk_latest": mdpk_latest
         },
     }
 
     def local_mods(filename):
-        """
-        Loads the local mods and their versions from a JSON file.
-        Args:
-            filename (str): Path to the JSON file.
-        Returns:
-            list: List of dicts with 'mod' and 'version' keys.
-        """
-        with open(filename, "r") as f:
-            mods_list = json.load(f)
-        return mods_list
+        """Loads or creates local mods file with proper JSON structure."""
+        try:
+            f = open(filename)
+            current_local = json.load(f)
+            return current_local
+        except (FileNotFoundError, json.JSONDecodeError):
+            # Create file with empty array if missing or invalid
+            with open(filename, "w") as f:
+                json.dump([], f)
+            return []
 
-    def write_local_mods(new_local):
-        with open("current_modlist.json", "w") as f:
+
+    def write_local_mods(dir,new_local):
+        with open(dir, "w") as f:
             json.dump(new_local, f, indent=4)
 
     def compare_versions(current_global, latest_global, current_local):
@@ -115,16 +132,22 @@ class mods:
         remove = []
 
         for dep in current_global:
+            if not dep.get("dependency"):
+                print(f"Skipping invalid dependency entry: {dep}")  
+                continue
+
             dep_name = dep["dependency"]
             current_version = dep["current_version"]
             latest_version = next((d["latest_version"] for d in latest_global if d["dependency"] == dep_name), None)
             if latest_version and version.parse(current_version) < version.parse(latest_version):
+                print(f"Updating {dep_name} from {current_version} to {latest_version}")
                 update.append({
                     "mod": dep_name,
                     "current_version": current_version,
                     "latest_version": latest_version
                 })
-            elif dep_name not in current_local:
+            elif not any(local_dep.get("dependency") == dep_name for local_dep in current_local):
+                print(f"Adding {dep_name} with version {latest_version}")
                 add.append({
                     "mod": dep_name,
                     "latest_version": latest_version
@@ -132,17 +155,16 @@ class mods:
             else:
                 print(f"Dependency {dep_name} is up to date.")
         for dep in current_local:
-            dep_name = dep["mod"]
-            if dep_name not in current_global:
+            if not isinstance(dep, dict) or not dep.get("dependency"):
+                print("Skipping invalid local mod entry:", dep)
+                continue
+            dep_name = dep["dependency"]    
+            if not any(global_dep.get("dependency") == dep_name for global_dep in current_global):
                 remove.append({
                     "mod": dep_name,
-                    "current_version": dep["version"]
+                    "current_version": dep["latest_version"]
                 })
-        return {
-            "update": update,
-            "add": add,
-            "remove": remove
-        }
+        return update, add, remove
 
     def update_mods(update, add, remove):
         """
@@ -155,12 +177,15 @@ class mods:
         """
         # Update logic here
         for mod in update:
-            cmd = f"./tcli install {mod['mod']}-{mod['latest_version']}"
-            subprocess.run(cmd)        
+            cmd = f"/home/dealbreacker/valheimServerManager/./tcli install valheim {mod['mod']}-{mod['latest_version']}"
+            subprocess.run(cmd, shell = True)        
         for mod in add:
-            cmd = f"./tcli install {mod['mod']}-{mod['latest_version']}"
-            subprocess.run(cmd)
+            cmd = f"/home/dealbreacker/valheimServerManager/./tcli install valheim {mod['mod']}-{mod['latest_version']}"
+            subprocess.run(cmd, shell = True)
         for mod in remove:
-            cmd = f"./tcli uninstall {mod['mod']}-{mod['current_version']}"
-            subprocess.run(cmd)
+            cmd = f"/home/dealbreacker/valheimServerManager/./tcli uninstall valheim {mod['mod']}"
+            subprocess.run(cmd, shell = True)
+        if remove:
+            subprocess.run("y",shell = True)
+        print("Mod list updated successfully.")
             
