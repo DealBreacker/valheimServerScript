@@ -40,9 +40,9 @@ mods.write_local_mods(latest_local,latest_global)
 print("Updating toml file...")
 update_toml_file(team, modpack_name, modpack_latest_ver, latest_global)
 
-# # Build new package
-# cmd = f"./tcli build"
-# subprocess.run(cmd)
+# Build new package
+cmd = f"/home/dealbreacker/valheimServerManager/./tcli build"
+subprocess.run(cmd, shell = True)
 
 # # Upload new package
 # cmd = f"./tcli publish --token {auth_token}"
