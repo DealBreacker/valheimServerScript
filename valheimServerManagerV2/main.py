@@ -28,6 +28,9 @@ current_local = mods.local_mods(latest_local)
 print("Comparing mods...")
 [update, add, remove] = mods.compare_versions(current_global, latest_global, current_local)
 
+# if(update == [] and add == [] and remove == []):
+#     print("No changes detected.")
+#     exit(0)
 # Update modlist 
 print("Updating modlist...")
 mods.update_mods(update, add, remove)
@@ -40,10 +43,13 @@ mods.write_local_mods(latest_local,latest_global)
 print("Updating toml file...")
 update_toml_file(team, modpack_name, modpack_latest_ver, latest_global)
 
-# Build new package
-cmd = f"/home/dealbreacker/valheimServerManager/./tcli build"
-subprocess.run(cmd, shell = True)
-
 # # Upload new package
-# cmd = f"./tcli publish --token {auth_token}"
-# subprocess.run(cmd)
+# print("Uploading package...")
+# cmd = f"/home/dealbreacker/valheimServerManager/./tcli publish --token {auth_token['auth_token']}"
+# subprocess.run(cmd, shell = True)
+
+# Sync local thunderstore modlist over to server list :)
+## This doesn't work yet lol :(
+print("Syncing local modlist to server...")
+subprocess.run("rsync /home/dealbreacker/.config/ThunderstoreCLI/Profiles/valheim/DefaultProfile/BepInEx/plugins/ /home/dealbreacker/.local/share/Steam/steamapps/common/Valheim\ dedicated\ server/BepInEx/plugins/", shell = True)
+print("Done!")

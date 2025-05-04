@@ -4,7 +4,7 @@ schemaVersion = "0.0.1"
 [package]
 namespace = "DealBreackers_Assembly"
 name = "DealBreackers_Haven_Assembly"
-versionNumber = "1.0.3"
+versionNumber = "1.0.4"
 description = "Example mod description"
 websiteUrl = "https://thunderstore.io"
 containsNsfwContent = false
@@ -53,8 +53,8 @@ readme = "./README.md"
 outdir = "./build"
 
 [[build.copy]]
-source = "./dist"
-target = ""
+source = "./build"
+target = "./old"
 
 
 [publish]
