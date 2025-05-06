@@ -4,7 +4,7 @@ schemaVersion = "0.0.1"
 [package]
 namespace = "DealBreackers_Assembly"
 name = "DealBreackers_Haven_Assembly"
-versionNumber = "1.0.4"
+versionNumber = "1.0.5"
 description = "Example mod description"
 websiteUrl = "https://thunderstore.io"
 containsNsfwContent = false
