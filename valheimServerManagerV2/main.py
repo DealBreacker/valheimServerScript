@@ -64,6 +64,5 @@ print("Syncing local modlist to server...")
 subprocess.run(f"rsync -avhP {thunderstore_mods} {server_mods}", shell = True)
 print("Done!")
 
-subprocess.run(["screen", "-S", "valheim", "-X", "stuff", "/home/dealbreacker/.local/share/Steam/steamapps/common/Valheim\ dedicated\ server/./start_server_bepinex.sh\n"])
-time.sleep(10)
+subprocess.run(["tmux", "send-keys", "-t", "valheim", "/home/dealbreacker/.local/share/Steam/steamapps/common/Valheim\ dedicated\ server/./start_server_bepinex.sh"])
 subprocess.run(["screen", "-S", "valheim", "-X", "detach"])
