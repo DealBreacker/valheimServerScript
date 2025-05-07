@@ -39,7 +39,7 @@ current_local = mods.local_mods(latest_local)
 print("Comparing mods...")
 [update, add, remove] = mods.compare_versions(current_global, latest_global, current_local)
 
-if(update != [] and add != [] and remove != []):
+if(update != [] or add != [] or remove != []):
     # Update modlist 
     print("Updating modlist...")
     mods.update_mods(update, add, remove)
