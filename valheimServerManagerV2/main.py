@@ -9,7 +9,7 @@ subprocess.run(["tmux", "send-keys", "-t", "valheim", "C-c"])
 time.sleep(5)
 subprocess.run(["tmux", "send-keys", "-t", "valheim", "Enter"])
 os.chdir("/home/dealbreacker/valheimServerManager/valheimServerManagerV2")
-
+print("Server stopped.")
 
 with open("/home/dealbreacker/auth_token.json", "r") as f:
     auth_token = json.load(f)
@@ -39,30 +39,36 @@ current_local = mods.local_mods(latest_local)
 print("Comparing mods...")
 [update, add, remove] = mods.compare_versions(current_global, latest_global, current_local)
 
-if(update == [] and add == [] and remove == []):
+if(update != [] and add != [] and remove != []):
+    # Update modlist 
+    print("Updating modlist...")
+    mods.update_mods(update, add, remove)
+
+    # Update current_modlist.json (latest_global is new_local)
+    print("Updating current_modlist.json...")
+    mods.write_local_mods(latest_local,latest_global)
+
+    # Update toml file
+    print("Updating toml file...")
+    update_toml_file(team, modpack_name, modpack_latest_ver, latest_global)
+
+    # Upload new package
+    print("Uploading package...")
+    cmd = f"/home/dealbreacker/valheimServerManager/./tcli publish --token {auth_token['auth_token']}"
+    subprocess.run(cmd, shell = True)
+
+    # Sync local thunderstore modlist over to server list :)
+    print("Syncing local modlist to server...")
+    subprocess.run(f"rsync -avhP {thunderstore_mods} {server_mods}", shell = True)
+    print("Done!")
+elif(update == [] and add == [] and remove == []):
     print("No changes detected.")
     exit(0)
-# Update modlist 
-print("Updating modlist...")
-mods.update_mods(update, add, remove)
-
-# Update current_modlist.json (latest_global is new_local)
-print("Updating current_modlist.json...")
-mods.write_local_mods(latest_local,latest_global)
-
-# Update toml file
-print("Updating toml file...")
-update_toml_file(team, modpack_name, modpack_latest_ver, latest_global)
-
-# Upload new package
-print("Uploading package...")
-cmd = f"/home/dealbreacker/valheimServerManager/./tcli publish --token {auth_token['auth_token']}"
-subprocess.run(cmd, shell = True)
-
-# Sync local thunderstore modlist over to server list :)
-print("Syncing local modlist to server...")
-subprocess.run(f"rsync -avhP {thunderstore_mods} {server_mods}", shell = True)
-print("Done!")
+else:
+    print("Error: update, add, remove are not all empty or not all filled.")
+    exit(1)
+# Start server
 
 subprocess.run(["tmux", "send-keys", "-t", "valheim", "/home/dealbreacker/.local/share/Steam/steamapps/common/Valheim\ dedicated\ server/./start_server_bepinex.sh"])
 subprocess.run(["tmux", "detach", "-s", "valheim"], check = True)
+print("Server started.")
