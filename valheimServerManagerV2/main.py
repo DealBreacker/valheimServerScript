@@ -55,7 +55,7 @@ if(update != [] or add != [] or remove != []):
     # Upload new package
     print("Uploading package...")
     cmd = f"/home/dealbreacker/valheimServerManager/./tcli publish --token {auth_token['auth_token']}"
-    subprocess.run(cmd, shell = True)
+    subprocess.run(cmd, shell = True, cwd="/home/dealbreacker/valheimServerManager")
 
     # Sync local thunderstore modlist over to server list :)
     print("Syncing local modlist to server...")
@@ -70,5 +70,5 @@ else:
 # Start server
 
 subprocess.run(["tmux", "send-keys", "-t", "valheim", "/home/dealbreacker/.local/share/Steam/steamapps/common/Valheim\ dedicated\ server/./start_server_bepinex.sh"])
-subprocess.run(["tmux", "detach", "-s", "valheim"], check = True)
+subprocess.run(["tmux", "detach", "-t", "valheim"], check = True)
 print("Server started.")

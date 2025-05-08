@@ -27,5 +27,5 @@ def update_toml_file(team: str, modpack_name: str, modpack_latest_ver: str, late
     toml_data["package"]["dependencies"] = dependencies
     
     # Write updated TOML
-    with open("thunderstore.toml", "w") as f:
+    with open("/home/dealbreacker/valheimServerManager/thunderstore.toml", "w") as f:
         toml.dump(toml_data, f)
